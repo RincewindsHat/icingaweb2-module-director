@@ -33,6 +33,8 @@ class PropertyModifierRejectOrSelect extends PropertyModifierHook
                 'is_true'  => $form->translate('Match boolean TRUE'),
                 'is_false' => $form->translate('Match boolean FALSE'),
                 'is_null'  => $form->translate('Match NULL value columns'),
+                'is_null'  => $form->translate('Match NULL value columns'),
+				'is_emptyString'  => $form->translate('Match the empty string'),
             ]),
             'class' => 'autosubmit',
         ]);
@@ -102,6 +104,11 @@ class PropertyModifierRejectOrSelect extends PropertyModifierHook
         );
     }
 
+    public function isEmptyString($string, $expression)
+    {
+        return $string == "";
+    }
+
     public function transform($value)
     {
         $method = $this->getSetting('filter_method');
@@ -125,6 +132,9 @@ class PropertyModifierRejectOrSelect extends PropertyModifierHook
             case 'is_false':
                 $func = 'isFalse';
                 break;
+			case 'is_emptyString':
+				$func = 'isEmptyString';
+				break;
             default:
                 throw new ConfigurationError(
                     '%s is not a valid value for an ArrayFilter filter_method',
